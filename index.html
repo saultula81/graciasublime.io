@@ -108,23 +108,18 @@
       transform: scale(1.05);
     }
 
-    #installButton {
-      font-size: 18px;
-      padding: 12px 24px;
-      background-color: #10b981;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 20px auto;
-      display: none;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-
-    #installButton:hover {
-      background-color: #059669;
-      transform: scale(1.05);
-    }
+ installButton.addEventListener('click', async () => {
+      installButton.style.display = 'none';
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          console.log('Usuario aceptó la instalación');
+        } else {
+          console.log('Usuario canceló la instalación');
+        }
+        deferredPrompt = null;
+      }
 
     @media (max-width: 500px) {
       .logo { width: 90px; }
