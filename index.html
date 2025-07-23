@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radio Gracia Sublime</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('Fondo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .player-container {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 2em;
+      max-width: 90%;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .cover {
+      width: 150px;
+      height: 150px;
+      border-radius: 20px;
+      object-fit: cover;
+      margin-bottom: 1em;
+      border: 3px solid white;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 1em;
+    }
+
+    .install-btn {
+      background: #00c4ff;
+      color: white;
+      padding: 0.8em 1.5em;
+      border: none;
+      border-radius: 30px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 1.5em;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .install-btn:hover {
+      background: #0099cc;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="player-container">
+    <img src="https://i.postimg.cc/B6TVcvyk/logo.jpg" alt="Cover Image" class="cover">
+    <h2>Radio Gracia Sublime</h2>
+    <audio controls autoplay>
+      <source src="https://fpsnew1.listen2myradio.com:2199/listen.php?ip=82.145.63.6&port=6829&type=s2&mount=1" type="audio/mpeg">
+      Tu navegador no soporta el audio.
+    </audio>
+    <button id="installBtn" class="install-btn">?? Instalar App</button>
+  </div>
+
+  <script>
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    installBtn.style.display = 'none';
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+
+      installBtn.addEventListener('click', () => {
+        installBtn.disabled = true;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Usuario aceptó instalar la app');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+
+    // Registrar service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log("Service Worker registrado"))
+        .catch(err => console.error("Error al registrar el SW:", err));
+    }
+  </script>
+</body>
+</html>
