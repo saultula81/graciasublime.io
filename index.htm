@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radio Gracia Sublime</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      text-align: center;
+      background-image: url('Fondo.jpg'); /* Asegúrate que esta imagen existe */
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        background-attachment: scroll;
+      }
+    }
+
+    .player-container {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 2em;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+      max-width: 90%;
+    }
+
+    .cover {
+      width: 150px;
+      height: 150px;
+      border-radius: 20px;
+      object-fit: cover;
+      margin-bottom: 1em;
+      border: 3px solid white;
+    }
+
+    .play-btn {
+      background: #00c4ff;
+      border: none;
+      border-radius: 50%;
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .play-btn:hover {
+      background: #0099cc;
+      transform: scale(1.1);
+    }
+
+    .play-btn:active {
+      transform: scale(0.95);
+    }
+
+    svg {
+      transition: all 0.3s ease;
+    }
+
+    .install-btn {
+      background: #00c4ff;
+      color: white;
+      padding: 0.8em 1.5em;
+      border: none;
+      border-radius: 30px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 1.5em;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .install-btn:hover {
+      background: #0099cc;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="player-container">
+    <img src="logo.jpg" alt="Cover Image" class="cover">
+    <h2>Radio Gracia Sublime</h2>
+
+    <!-- Botón Play SVG -->
+    <div class="player-controls">
+      <button id="playButton" class="play-btn" aria-label="Reproducir">
+        <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50">
+          <polygon points="30,20 80,50 30,80" fill="white" id="playShape" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Reproductor invisible -->
+    <audio id="radioPlayer">
+      <source src="https://fpsnew1.listen2myradio.com:2199/listen.php?ip=82.145.63.6&port=6829&type=s2&mount=1" type="audio/mpeg">
+      Tu navegador no soporta el audio.
+    </audio>
+
+    <!-- Botón Instalar -->
+    <button id="installBtn" class="install-btn">📲 Instalar App</button>
+  </div>
+
+  <script>
+    // PLAY/PAUSE SVG
+    const audio = document.getElementById('radioPlayer');
+    const playBtn = document.getElementById('playButton');
+    const playShape = document.getElementById('playShape');
+    let isPlaying = false;
+
+    playBtn.addEventListener('click', () => {
+      if (!isPlaying) {
+        audio.play();
+        playShape.setAttribute('points', '30,20 30,80 45,80 45,20 65,20 65,80 80,80 80,20'); // pause shape
+        isPlaying = true;
+      } else {
+        audio.pause();
+        playShape.setAttribute('points', '30,20 80,50 30,80'); // play shape
+        isPlaying = false;
+      }
+    });
+
+    // INSTALAR APP
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    installBtn.style.display = 'none';
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+
+      installBtn.addEventListener('click', () => {
+        installBtn.disabled = true;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('Usuario aceptó instalar la app');
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+
+    // REGISTRO DEL SERVICE WORKER
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log("Service Worker registrado"))
+        .catch(err => console.error("Error al registrar el SW:", err));
+    }
+  </script>
+</body>
+</html>
