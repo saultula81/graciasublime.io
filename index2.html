@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gracia Sublime Radio</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      background-image: url('fondo.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #lunaradio {
+      width: 100%;
+      max-width: 600px;
+      height: 200px;
+      margin-top: 100px;
+    }
+  </style>
+
+  <!-- jQuery y Lunaradio -->
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/lunaradio.min.js"></script>
+</head>
+
+<body>
+  <div id="lunaradio"></div>
+
+  <script>
+    $(document).ready(function(){
+      $("#lunaradio").lunaradio({
+        userinterface: "big",
+        backgroundcolor: "",
+        fontcolor: "#000000",
+        hightlightcolor: "#facc15",
+        fontname: "Saira Condensed",
+        googlefont: "Saira+Condensed:wght@100",
+        fontratio: "0.8",
+        radioname: "Radio Gracia Sublime",
+        scroll: "true",
+        coverimage: "https://i.postimg.cc/B6TVcvyk/logo.jpg",
+        usevisualizer: "real",
+        coverstyle: "animated",
+        visualizertype: "2",
+        multicolorvisualizer: "true",
+        color1: "#facc15",
+        color2: "#facc15",
+        color3: "#facc15",
+        color4: "#facc15",
+        streamurl: "http://82.145.63.6:6829/",
+        streamtype: "shoutcast",
+               metadatatechnic: "none",
+        ownmetadataurl: "",
+        metadatainterval: "20000",
+        volume: "85",
+        debug: "false",
+        autoplay: "true"
+      });
+    });
+  </script>
+</body>
+</html>

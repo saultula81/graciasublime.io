@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gracia Sublime Radio</title>
+  <link rel="shortcut icon" href="favicon.ico" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#facc15">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      background-image: url('fondo.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #lunaradio {
+      width: 100%;
+      max-width: 600px;
+      height: 200px;
+      margin-top: 100px;
+    }
+
+    #installButton {
+      font-size: 18px;
+      padding: 12px 24px;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 20px auto;
+      display: none;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #installButton:hover {
+      background-color: #059669;
+      transform: scale(1.05);
+    }
+  </style>
+
+  <!-- jQuery y Lunaradio -->
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/lunaradio.min.js"></script>
+</head>
+
+<body>
+  <div id="lunaradio"></div>
+  <button id="installButton">Instalar app</button>
+
+  <script>
+    $(document).ready(function(){
+      $("#lunaradio").lunaradio({
+        userinterface: "big",
+        backgroundcolor: "",
+        fontcolor: "#000000",
+        hightlightcolor: "#facc15",
+        fontname: "Saira Condensed",
+        googlefont: "Saira+Condensed:wght@100",
+        fontratio: "0.8",
+        radioname: "Radio Gracia Sublime",
+        scroll: "true",
+        coverimage: "https://i.postimg.cc/B6TVcvyk/logo.jpg",
+        usevisualizer: "real",
+        coverstyle: "animated",
+        visualizertype: "2",
+        multicolorvisualizer: "true",
+        color1: "#facc15",
+        color2: "#facc15",
+        color3: "#facc15",
+        color4: "#facc15",
+        streamurl: "http://82.145.63.6:6829/",
+        streamtype: "shoutcast",
+        metadatatechnic: "none",
+        ownmetadataurl: "",
+        metadatainterval: "20000",
+        volume: "85",
+        debug: "false",
+        autoplay: "true"
+      });
+    });
+
+    // Instalar app
+    let deferredPrompt;
+    const installButton = document.getElementById('installButton');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installButton.style.display = 'block';
+    });
+
+    installButton.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('App instalada');
+          }
+          deferredPrompt = null;
+          installButton.style.display = 'none';
+        });
+      }
+    });
+
+    // Registrar el service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service worker registrado', reg))
+        .catch(err => console.error('Error al registrar service worker', err));
+    }
+  </script>
+</body>
+</html>
