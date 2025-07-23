@@ -1,11 +1,11 @@
 {
   "name": "Radio Gracia Sublime",
   "short_name": "Gracia Sublime",
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#facc15",
-  "description": "Escucha Radio Gracia Sublime en vivo",
+  "description": "Radio online Gracia Sublime - música en vivo",
   "icons": [
     {
       "src": "icon192.png",
