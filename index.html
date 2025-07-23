@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Radio Gracia Sublime</title>
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-
-  <!-- FontAwesome para íconos -->
   <script src="https://kit.fontawesome.com/5c6d0e14f8.js" crossorigin="anonymous"></script>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#facc15" />
 
   <style>
     body {
@@ -23,24 +23,25 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
-      padding: 20px;
+      user-select: none;
     }
-
     header {
       margin-top: 20px;
     }
-
     .logo {
       width: 120px;
-      max-width: 100%;
+      transition: transform 0.3s ease;
+      cursor: pointer;
     }
-
+    .logo:hover {
+      transform: scale(1.1);
+    }
     h1 {
       margin: 10px 0;
       font-size: 2.5rem;
       color: #facc15;
+      text-shadow: 0 0 5px #facc15;
     }
-
     #playButton {
       width: 100px;
       height: 100px;
@@ -54,43 +55,65 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.3);
       transition: background 0.3s ease, transform 0.2s ease;
     }
-
     #playButton:hover {
       background: #eab308;
-      transform: scale(1.05);
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px #facc15;
     }
-
     #playButton.playing {
       background: #ef4444;
       color: #fff;
+      box-shadow: 0 8px 25px #ef4444;
     }
-
+    #installButton {
+      margin: 10px 0 30px 0;
+      padding: 10px 25px;
+      background: #10b981;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(16,185,129,0.5);
+      transition: background 0.3s ease, transform 0.2s ease;
+      user-select: none;
+      display: none; /* oculto por defecto */
+    }
+    #installButton:hover {
+      background: #059669;
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px #059669;
+    }
+    #installButton:disabled {
+      background: #4ade80;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
     .socials {
       display: flex;
       gap: 25px;
-      margin-top: 25px;
+      margin-top: 10px;
       justify-content: center;
-      flex-wrap: wrap;
     }
-
     .socials a {
       color: #facc15;
-      font-size: 2.8rem;
-      transition: color 0.3s ease, transform 0.3s ease;
-      text-decoration: none;
+      font-size: 2.5rem;
+      transition: color 0.3s ease, transform 0.2s ease;
+      user-select: none;
     }
-
     .socials a:hover {
       color: #fff;
       transform: scale(1.2);
     }
-
     #status {
       margin-top: 10px;
       font-size: 1rem;
-      opacity: 0.85;
+      opacity: 0.8;
+      user-select: none;
+      text-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
-
     .wave-container {
       display: flex;
       justify-content: center;
@@ -98,50 +121,25 @@
       height: 30px;
       margin-top: 10px;
     }
-
     .wave {
       width: 6px;
       height: 100%;
       background: #facc15;
       animation: waveAnim 1s infinite;
       animation-play-state: paused;
-      border-radius: 3px;
+      border-radius: 2px;
     }
-
     .wave:nth-child(1) { animation-delay: 0s; }
     .wave:nth-child(2) { animation-delay: 0.1s; }
     .wave:nth-child(3) { animation-delay: 0.2s; }
     .wave:nth-child(4) { animation-delay: 0.3s; }
     .wave:nth-child(5) { animation-delay: 0.4s; }
-
     @keyframes waveAnim {
       0%, 100% { transform: scaleY(0.3); }
       50% { transform: scaleY(1); }
     }
-
-    #installButton {
-      margin-top: 30px;
-      background: #22c55e;
-      color: #fff;
-      border: none;
-      padding: 12px 25px;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(34,197,94,0.6);
-      transition: background 0.3s ease, transform 0.2s ease;
-      display: none; /* inicialmente oculto */
-    }
-
-    #installButton:hover {
-      background: #16a34a;
-      transform: scale(1.05);
-    }
-
     @media (max-width: 600px) {
-      h1 {
-        font-size: 1.8rem;
-      }
+      h1 { font-size: 1.8rem; }
       #playButton {
         width: 80px;
         height: 80px;
@@ -149,24 +147,21 @@
       }
       .socials a {
         font-size: 2rem;
-      }
-      #installButton {
-        width: 90%;
-        font-size: 1rem;
+        gap: 15px;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <img class="logo" src="logo.jpg" alt="Logo Gracia Sublime" />
+    <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Radio_icon.svg/1024px-Radio_icon.svg.png" alt="Logo Gracia Sublime" />
     <h1>Radio Gracia Sublime</h1>
   </header>
 
-  <button id="playButton">▶</button>
+  <button id="playButton" aria-label="Botón reproducir/pausar">▶</button>
   <p id="status">Haz clic para escuchar en vivo</p>
 
-  <div class="wave-container" id="waves">
+  <div class="wave-container" id="waves" aria-hidden="true">
     <div class="wave"></div>
     <div class="wave"></div>
     <div class="wave"></div>
@@ -174,14 +169,14 @@
     <div class="wave"></div>
   </div>
 
-  <div class="socials">
-    <a href="https://wa.me/XXXXXXXXXXX" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-    <a href="https://facebook.com/XXXXXXXXXXX" target="_blank" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-    <a href="https://instagram.com/XXXXXXXXXXX" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    <a href="https://youtube.com/@XXXXXXXXXXX" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-  </div>
+  <button id="installButton">Instalar App</button>
 
-  <button id="installButton">Instalar Radio Gracia Sublime</button>
+  <div class="socials" aria-label="Redes sociales">
+    <a href="https://wa.me/541112345678" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://facebook.com/yourpage" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+    <a href="https://instagram.com/yourprofile" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://youtube.com/@yourchannel" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+  </div>
 
   <audio id="radioPlayer" src="https://uk24freenew.listen2myradio.com/live.mp3?typeportmount=s2_17969_stream_854900797"></audio>
 
@@ -190,10 +185,9 @@
     const playButton = document.getElementById("playButton");
     const statusText = document.getElementById("status");
     const waves = document.querySelectorAll(".wave");
-    const installBtn = document.getElementById("installButton");
+    const installButton = document.getElementById("installButton");
 
     let isPlaying = false;
-    let deferredPrompt;
 
     playButton.addEventListener("click", () => {
       if (!isPlaying) {
@@ -213,34 +207,38 @@
       }
     });
 
-    // Detectar evento de instalación PWA
+    // Detectar cuando la PWA se puede instalar
+    let deferredPrompt;
     window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault(); // Evita que se muestre el popup inmediatamente
+      e.preventDefault();
       deferredPrompt = e;
-      installBtn.style.display = 'inline-block'; // Mostrar botón instalar
+      installButton.style.display = 'inline-block';
     });
 
-    installBtn.addEventListener('click', async () => {
+    installButton.addEventListener('click', async () => {
+      installButton.disabled = true;
       if (deferredPrompt) {
-        deferredPrompt.prompt(); // Muestra el popup de instalación
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
+        deferredPrompt.prompt();
+        const choiceResult = await deferredPrompt.userChoice;
+        if (choiceResult.outcome === 'accepted') {
           console.log('Usuario aceptó instalar la app');
         } else {
-          console.log('Usuario canceló la instalación');
+          console.log('Usuario rechazó instalar la app');
         }
         deferredPrompt = null;
-        installBtn.style.display = 'none';
       }
+      installButton.style.display = 'none';
+      installButton.disabled = false;
     });
 
-    // Para ocultar el botón si ya está instalado o no soportado
-    window.addEventListener('appinstalled', () => {
-      installBtn.style.display = 'none';
-      console.log('App instalada');
-    });
+    // Registrar Service Worker (solo si tienes service-worker.js)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('Service Worker registrado:', reg.scope))
+          .catch(err => console.error('Error al registrar Service Worker:', err));
+      });
+    }
   </script>
 </body>
 </html>
-
-
