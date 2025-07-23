@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gracia Sublime Radio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
       background: #0f172a;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', sans-serif;
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -17,42 +18,31 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      gap: 1.5rem;
     }
 
     .logo {
-      width: 120px;
-      height: auto;
-      margin-bottom: 20px;
+      width: 100px;
+      margin-top: 20px;
     }
 
     h1 {
-      margin: 0;
-      font-size: 2rem;
       color: #facc15;
-    }
-
-    #songTitle {
-      margin: 10px 0;
-      font-size: 1rem;
-      color: #ddd;
+      font-size: 2.2rem;
+      margin: 0;
     }
 
     #playButton {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       border: none;
       background: #facc15;
       color: #0f172a;
-      font-size: 2rem;
+      font-size: 2.5rem;
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      margin-top: 20px;
-    }
-
-    #playButton:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px #facc15;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     #playButton.playing {
@@ -60,9 +50,18 @@
       color: #fff;
     }
 
+    #playButton:hover {
+      transform: scale(1.1);
+    }
+
+    #status {
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+
     .wave-container {
-      margin-top: 30px;
       display: flex;
+      justify-content: center;
       gap: 5px;
       height: 30px;
     }
@@ -86,59 +85,64 @@
       50% { transform: scaleY(1); }
     }
 
-    #status {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      opacity: 0.7;
+    .socials {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .socials a {
+      color: #facc15;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .socials a:hover {
+      color: #ffffff;
     }
 
     @media (max-width: 500px) {
-      .logo { width: 90px; }
-      h1 { font-size: 1.5rem; }
-      #playButton { width: 80px; height: 80px; font-size: 1.5rem; }
+      #playButton {
+        width: 70px;
+        height: 70px;
+        font-size: 2rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
     }
   </style>
+  <script src="https://kit.fontawesome.com/5c6d0e14f8.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <!-- Logo (usa tu imagen real aquí) -->
   <img class="logo" src="logo.jpg" alt="Logo de Gracia Sublime">
-
   <h1>Gracia Sublime Radio</h1>
 
-
-  <!-- Botón Play/Pause -->
   <button id="playButton">▶</button>
-  <p id="status">Haz clic para escuchar</p>
+  <p id="status">Haz clic para escuchar en vivo</p>
 
-  <!-- Ondas animadas -->
   <div class="wave-container" id="waves">
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
+    <div class="wave"></div><div class="wave"></div><div class="wave"></div>
+    <div class="wave"></div><div class="wave"></div>
   </div>
 
-  <!-- URL del stream -->
-  <div id="urladdress" style="display:none">
-    https://fpsnew1.listen2myradio.com:2199/listen.php?ip=82.145.63.6&port=6829&type=s2&mount=1
+  <div class="socials">
+    <a href="https://wa.me/XXXXXXXXXXX" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://facebook.com/XXXXXXXXXXX" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://instagram.com/XXXXXXXXXXX" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://youtube.com/@XXXXXXXXXXX" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
   </div>
 
-  <!-- Audio -->
-  <audio id="radioPlayer"></audio>
+  <audio id="radioPlayer" src="https://uk24freenew.listen2myradio.com/live.mp3?typeportmount=s2_17969_stream_854900797"></audio>
 
   <script>
-    const streamUrl = document.getElementById("urladdress").textContent.trim();
     const audio = document.getElementById("radioPlayer");
     const playButton = document.getElementById("playButton");
     const statusText = document.getElementById("status");
     const waves = document.querySelectorAll(".wave");
 
-    audio.src = streamUrl;
     let isPlaying = false;
 
     playButton.addEventListener("click", () => {
@@ -158,9 +162,6 @@
         isPlaying = false;
       }
     });
-
-    // 🔍 Placeholder para función futura de metadatos
-    document.getElementById("songTitle").textContent = "Canción actual: No disponible (próximamente)";
   </script>
 
 </body>
