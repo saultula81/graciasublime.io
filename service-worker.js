@@ -4,8 +4,8 @@ const urlsToCache = [
   '/index.html',  // si tu archivo principal no es index.html cambia este nombre
   '/manifest.json',
   '/logo.jpg',
-  '/icon-192.png',
-  '/icon-512.png',
+  '/icon192.png',
+  '/icon512.png',
   // aquí puedes agregar más recursos estáticos que quieras cachear
 ];
 
