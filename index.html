@@ -1,107 +1,119 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Radio Gracia Sublime</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/5c6d0e14f8.js" crossorigin="anonymous"></script>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#facc15" />
+
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: url('Fondo.jpg') no-repeat center center fixed;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      text-align: center;
+      background: url('fondo.jpg') no-repeat center center fixed;
       background-size: cover;
-      font-family: Arial, sans-serif;
-      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      text-align: center;
+      min-height: 100vh;
     }
 
-    .player-container {
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 20px;
-      padding: 2em;
-      max-width: 90%;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    header img.logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 10px;
     }
 
-    .cover {
-      width: 150px;
-      height: 150px;
-      border-radius: 20px;
-      object-fit: cover;
-      margin-bottom: 1em;
-      border: 3px solid white;
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 10px;
+      text-shadow: 1px 1px 4px #000;
+    }
+
+    #playButton {
+      font-size: 3rem;
+      padding: 20px 30px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #fff;
+      margin: 20px 0;
+    }
+
+    #status {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    .wave-container {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 20px;
+    }
+
+    .wave {
+      width: 5px;
+      height: 20px;
+      background: #facc15;
+      animation: bounce 1s infinite ease-in-out;
+    }
+
+    .wave:nth-child(2) { animation-delay: 0.1s; }
+    .wave:nth-child(3) { animation-delay: 0.2s; }
+    .wave:nth-child(4) { animation-delay: 0.3s; }
+    .wave:nth-child(5) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(2); }
+    }
+
+    #installButton {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #facc15;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+      font-size: 1.5rem;
+    }
+
+    .socials a {
+      color: white;
     }
 
     audio {
-      width: 100%;
-      margin-top: 1em;
+      display: none;
     }
 
-    .install-btn {
-      background: #00c4ff;
-      color: white;
-      padding: 0.8em 1.5em;
-      border: none;
-      border-radius: 30px;
-      font-size: 1em;
-      cursor: pointer;
-      margin-top: 1.5em;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
+    @media (max-width: 600px) {
+      #playButton {
+        font-size: 2.5rem;
+        padding: 15px 25px;
+      }
 
-    .install-btn:hover {
-      background: #0099cc;
-      transform: scale(1.05);
-    }
-  </style>
-</head>
-<body>
-  <div class="player-container">
-    <img src="https://i.postimg.cc/B6TVcvyk/logo.jpg" alt="Cover Image" class="cover">
-    <h2>Radio Gracia Sublime</h2>
-    <audio controls autoplay>
-      <source src="https://fpsnew1.listen2myradio.com:2199/listen.php?ip=82.145.63.6&port=6829&type=s2&mount=1" type="audio/mpeg">
-      Tu navegador no soporta el audio.
-    </audio>
-    <button id="installBtn" class="install-btn">?? Instalar App</button>
-  </div>
+      h1 {
+        font-size: 1.6rem;
+      }
 
-  <script>
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
-    installBtn.style.display = 'none';
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block';
-
-      installBtn.addEventListener('click', () => {
-        installBtn.disabled = true;
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('Usuario aceptó instalar la app');
-          }
-          deferredPrompt = null;
-        });
-      });
-    });
-
-    // Registrar service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log("Service Worker registrado"))
-        .catch(err => console.error("Error al registrar el SW:", err));
-    }
-  </script>
-</body>
-</html>
+      .socials {
