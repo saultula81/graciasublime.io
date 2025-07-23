@@ -201,19 +201,25 @@
       installButton.style.display = 'inline-block';
     });
 
-    installButton.addEventListener('click', async () => {
-      installButton.disabled = true;
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        if (choice.outcome === 'accepted') {
-          console.log('Usuario aceptó instalar la app');
-        }
-        deferredPrompt = null;
-      }
-      installButton.style.display = 'none';
-      installButton.disabled = false;
-    });
+    #installButton {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 18px;
+  background-color: #facc15;
+  border: none;
+  border-radius: 8px;
+  color: #1e293b;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+  transition: all 0.3s ease;
+  display: none; /* por defecto oculto, se muestra cuando esté disponible */
+}
+#installButton:hover {
+  background-color: #fde047;
+  transform: scale(1.05);
+}
+
 
     // Service Worker
     if ('serviceWorker' in navigator) {
