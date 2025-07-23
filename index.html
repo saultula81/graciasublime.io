@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Gracia Sublime Radio</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="logo.png" type="image/png">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      background: url('Fondo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      width: 150px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .play-button {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
+      padding: 15px 30px;
+      border-radius: 30px;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .play-button:hover {
+      background-color: white;
+      color: black;
+      transform: scale(1.05);
+    }
+
+    #installBtn {
+      margin-top: 20px;
+      background-color: #0ff;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff;
+      transition: 0.3s;
+    }
+
+    #installBtn:hover {
+      background-color: #00f;
+      color: white;
+      box-shadow: 0 0 20px #00f;
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="logo.png" alt="Logo" class="logo">
+
+  <button class="play-button" onclick="toggleAudio()">▶ Reproducir / Pausar</button>
+   <source src="https://fpsnew1.listen2myradio.com:2199/listen.php?ip=82.145.63.6&port=6829&type=s2&mount=1" type="audio/mpeg">
+
+  <button id="installBtn" style="display:none;">➕ Instalar App</button>
+
+  <script>
+    // Control del audio
+    const audio = document.getElementById('radio');
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    // PWA instalación
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'inline-block';
+    });
+
+    installBtn.addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('App instalada');
+          }
+          deferredPrompt = null;
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
