@@ -1,12 +1,7 @@
-self.addEventListener('install', event => {
-  console.log('Service worker instalado');
-  self.skipWaiting();
+self.addEventListener('install', e => {
+  console.log('Service Worker instalado');
 });
 
-self.addEventListener('activate', event => {
-  console.log('Service worker activado');
-});
-
-self.addEventListener('fetch', function(event) {
-  // No hacer nada especial, solo permitir modo offline básico si querés.
+self.addEventListener('fetch', e => {
+  // Puede manejar cache aquí si lo deseas
 });
